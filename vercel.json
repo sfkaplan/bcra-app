@@ -1,5 +1,0 @@
-{
-  "rewrites": [
-    { "source": "/api/bcra", "destination": "/api/bcra" }
-  ]
-}
