@@ -337,6 +337,201 @@
       .stats-row { grid-template-columns: 1fr 1fr; }
       .hero-card { padding: 28px 24px; }
     }
+    /* ── GAUGE SECTION ──────────────────────────────────────────────────────── */
+    .gauge-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 32px;
+      margin-top: 32px;
+      animation: fadeUp 0.6s ease 0.35s both;
+    }
+
+    .gauge-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 28px;
+      gap: 12px;
+    }
+
+    .gauge-subtitle {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      margin-top: 5px;
+    }
+
+    .version-badge {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      padding: 3px 8px;
+      border-radius: 2px;
+      white-space: nowrap;
+    }
+
+    .gauge-inputs {
+      display: flex;
+      gap: 16px;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      margin-bottom: 32px;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex: 1;
+      min-width: 180px;
+    }
+
+    .input-group label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .input-group input {
+      font-family: 'DM Mono', monospace;
+      font-size: 1rem;
+      color: var(--text);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 10px 14px;
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%;
+    }
+
+    .input-group input:focus {
+      border-color: var(--accent);
+    }
+
+    .input-group input::placeholder {
+      color: var(--border);
+    }
+
+    .calc-btn {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 3px;
+      padding: 11px 24px;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      white-space: nowrap;
+    }
+
+    .calc-btn:hover { opacity: 0.85; }
+
+    .gauge-display {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .gauge-wrap {
+      position: relative;
+      width: 400px;
+      max-width: 100%;
+    }
+
+    .gauge-wrap canvas {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .gauge-needle-wrap {
+      position: absolute;
+      inset: 0;
+    }
+
+    .gauge-needle-wrap svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .gauge-result {
+      text-align: center;
+    }
+
+    .result-cociente {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+    }
+
+    .result-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .result-value {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2.8rem;
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    .result-unit {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .result-zona {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      margin-top: 10px;
+      padding: 5px 14px;
+      border-radius: 2px;
+      display: inline-block;
+    }
+
+    .gauge-empty {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+    }
+
+    .gauge-disclaimer {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem;
+      color: var(--muted);
+      margin-top: 20px;
+      letter-spacing: 0.05em;
+    }
+
+    .gauge-source {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--muted);
+      margin-top: 4px;
+      font-style: italic;
+      letter-spacing: 0.05em;
+    }
+
   </style>
 </head>
 <body>
@@ -388,6 +583,60 @@
         <div class="loading" id="chart-loading"><div class="spinner"></div>Cargando serie histórica…</div>
         <canvas id="myChart" style="display:none;"></canvas>
       </div>
+    </div>
+
+    <!-- GAUGE SECTION -->
+    <div class="gauge-section">
+      <div class="gauge-header">
+        <div>
+          <span class="chart-title">Riesgo de Liquidación de Vacas Lecheras</span>
+          <p class="gauge-subtitle">Relación precio carne / precio leche · Base: 450 kg vaca en pie</p>
+        </div>
+        <span class="version-badge">v0.1</span>
+      </div>
+
+      <div class="gauge-inputs">
+        <div class="input-group">
+          <label for="precio-leche">Leche cruda ($/lt)</label>
+          <input type="number" id="precio-leche" placeholder="ej: 120" min="0" step="0.01" />
+        </div>
+        <div class="input-group">
+          <label for="precio-vaca">Vaca buena en pie ($/kg)</label>
+          <input type="number" id="precio-vaca" placeholder="ej: 2500" min="0" step="0.01" />
+        </div>
+        <button class="calc-btn" id="calc-btn">Calcular</button>
+      </div>
+
+      <div class="gauge-display">
+        <div class="gauge-wrap">
+          <canvas id="gaugeCanvas" width="400" height="220"></canvas>
+          <div class="gauge-needle-wrap">
+            <svg id="gaugeSvg" viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+              <line id="gaugeNeedle" x1="200" y1="200" x2="200" y2="60"
+                stroke="#1a1814" stroke-width="3" stroke-linecap="round"
+                style="transform-origin: 200px 200px; transform: rotate(0deg); transition: transform 0.8s cubic-bezier(.4,2,.6,1)"/>
+              <circle cx="200" cy="200" r="8" fill="#1a1814"/>
+              <circle cx="200" cy="200" r="4" fill="#f7f5f1"/>
+            </svg>
+          </div>
+        </div>
+
+        <div class="gauge-result" id="gauge-result" style="display:none;">
+          <div class="result-cociente">
+            <span class="result-label">Cociente</span>
+            <span class="result-value" id="result-value">—</span>
+            <span class="result-unit">lts/VO/día de indiferencia</span>
+          </div>
+          <div class="result-zona" id="result-zona"></div>
+        </div>
+
+        <div class="gauge-empty" id="gauge-empty">
+          <span>Ingresá los precios para calcular</span>
+        </div>
+      </div>
+
+      <p class="gauge-disclaimer">(*) No incluye descuentos por gastos comerciales y flete (~5%)</p>
+      <p class="gauge-source">C.E.L.P.C en base a SIGLEA y SIO-Carnes</p>
     </div>
 
     <footer>
@@ -613,6 +862,134 @@
       await loadLatest();
       await loadHistory(currentDays);
     })();
+
+    // ─── GAUGE ───────────────────────────────────────────────────────────────────
+
+    const KG_VACA = 450;
+
+    // Colores para cada tramo de 10 unidades (0-10, 10-20, ... 60-70+)
+    const GAUGE_COLORS = [
+      '#2d6a2d', // 0–10   verde oscuro
+      '#4a9c3a', // 10–20  verde claro
+      '#8aba3a', // 20–30  amarillo verdoso
+      '#d4c830', // 30–40  amarillo
+      '#e89830', // 40–50  naranja claro
+      '#e06020', // 50–60  naranja oscuro
+      '#c83020', // 60–70  rojo claro
+      '#8b0000', // 70+    rojo oscuro
+    ];
+
+    const ZONA_LABELS = [
+      { label: 'Muy conveniente ordeñar', bg: '#e8f5e8', color: '#2d6a2d' },
+      { label: 'Conveniente ordeñar',     bg: '#eef7e8', color: '#4a9c3a' },
+      { label: 'Levemente favorable',      bg: '#f5f9e0', color: '#6a8a20' },
+      { label: 'Zona neutra',              bg: '#fdf9dc', color: '#a09020' },
+      { label: 'Leve riesgo de liquidar',  bg: '#fdf0dc', color: '#c07020' },
+      { label: 'Riesgo moderado',          bg: '#fde8d8', color: '#c04010' },
+      { label: 'Alto riesgo de liquidar',  bg: '#fdd8d8', color: '#b02010' },
+      { label: 'Liquidación muy probable', bg: '#f8d0d0', color: '#8b0000' },
+    ];
+
+    function drawGauge() {
+      const canvas = document.getElementById('gaugeCanvas');
+      const ctx    = canvas.getContext('2d');
+      const W = canvas.width, H = canvas.height;
+      const cx = W / 2, cy = H - 20;
+      const R  = 160, r = 100;
+
+      ctx.clearRect(0, 0, W, H);
+
+      const totalSegments = 8;
+      const startAngle = Math.PI;       // 180° (izquierda)
+      const endAngle   = 2 * Math.PI;   // 360° (derecha)
+      const totalArc   = endAngle - startAngle;
+      const segArc     = totalArc / totalSegments;
+
+      GAUGE_COLORS.forEach((color, i) => {
+        const a0 = startAngle + i * segArc;
+        const a1 = a0 + segArc;
+        ctx.beginPath();
+        ctx.moveTo(cx + r * Math.cos(a0), cy + r * Math.sin(a0));
+        ctx.arc(cx, cy, R, a0, a1);
+        ctx.arc(cx, cy, r, a1, a0, true);
+        ctx.closePath();
+        ctx.fillStyle = color;
+        ctx.fill();
+      });
+
+      // Etiquetas de escala
+      ctx.fillStyle = '#9a9088';
+      ctx.font = '11px DM Mono, monospace';
+      ctx.textAlign = 'center';
+      const tickVals = [0, 10, 20, 30, 40, 50, 60, 70];
+      tickVals.forEach((val, i) => {
+        const angle = startAngle + (i / totalSegments) * totalArc;
+        const tx = cx + (R + 16) * Math.cos(angle);
+        const ty = cy + (R + 16) * Math.sin(angle);
+        ctx.fillText(val, tx, ty);
+      });
+    }
+
+    function cocienteToAngle(cociente) {
+      // Mapea 0→-90°, 70+→+90° (en términos de rotación desde vertical)
+      const clamped = Math.min(Math.max(cociente, 0), 80);
+      const pct     = clamped / 70;            // 0 a 1 (satura en 70)
+      const degrees = -90 + pct * 180;         // -90° (izq) a +90° (der)
+      return degrees;
+    }
+
+    function getZonaIndex(cociente) {
+      if (cociente < 10) return 0;
+      if (cociente < 20) return 1;
+      if (cociente < 30) return 2;
+      if (cociente < 40) return 3;
+      if (cociente < 50) return 4;
+      if (cociente < 60) return 5;
+      if (cociente < 70) return 6;
+      return 7;
+    }
+
+    function calcular() {
+      const precioLeche = parseFloat(document.getElementById('precio-leche').value);
+      const precioVaca  = parseFloat(document.getElementById('precio-vaca').value);
+
+      if (!precioLeche || !precioVaca || precioLeche <= 0 || precioVaca <= 0) {
+        alert('Ingresá valores válidos para ambos precios.');
+        return;
+      }
+
+      // Cociente: ($/kg × kg_vaca) / ($/lt × lts/día) → despejando lts/día de indiferencia
+      // lts_indiferencia = (precioVaca × KG_VACA) / precioLeche
+      const cociente = (precioVaca * KG_VACA) / precioLeche;
+
+      // Mover aguja
+      const deg    = cocienteToAngle(cociente);
+      const needle = document.getElementById('gaugeNeedle');
+      needle.style.transform = `rotate(${deg}deg)`;
+
+      // Mostrar resultado
+      const zi   = getZonaIndex(cociente);
+      const zona = ZONA_LABELS[zi];
+
+      document.getElementById('result-value').textContent =
+        new Intl.NumberFormat('es-AR', { maximumFractionDigits: 1 }).format(cociente);
+
+      const zonaEl = document.getElementById('result-zona');
+      zonaEl.textContent    = zona.label;
+      zonaEl.style.background = zona.bg;
+      zonaEl.style.color      = zona.color;
+
+      document.getElementById('gauge-result').style.display = 'block';
+      document.getElementById('gauge-empty').style.display  = 'none';
+    }
+
+    document.getElementById('calc-btn').addEventListener('click', calcular);
+    document.getElementById('precio-leche').addEventListener('keydown', e => { if (e.key === 'Enter') calcular(); });
+    document.getElementById('precio-vaca').addEventListener('keydown',  e => { if (e.key === 'Enter') calcular(); });
+
+    // Dibujar gauge al cargar
+    drawGauge();
+
   </script>
 </body>
 </html>
